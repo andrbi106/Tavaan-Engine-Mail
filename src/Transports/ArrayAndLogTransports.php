@@ -52,7 +52,8 @@ final class LogTransport implements TransportInterface
     public function send(Message $message): SentMessage
     {
         $line = \sprintf(
-            "[%s] To: %s | Subject: %s\n",
+            "[%s] To: %s | Subject: %s
+",
             \date('Y-m-d H:i:s'),
             \implode(', ', $message->getTo()),
             $message->getSubject() ?? ''
