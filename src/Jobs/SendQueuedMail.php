@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tavaan\Engine\Mail\Jobs;
 
-use Tavaan\Core\Contracts\Queue\ShouldQueue;
+use Tavaan\Engine\Queue\Contracts\ShouldQueue;
 use Tavaan\Engine\Mail\Mailable;
 use Tavaan\Engine\Mail\Mailer;
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tavaan\Engine\Mail\Transports;
 
-use Tavaan\Core\Contracts\Mail\TransportInterface;
+use Tavaan\Engine\Mail\Contracts\TransportInterface;
 use Tavaan\Engine\Mail\MailException;
 use Tavaan\Engine\Mail\Message;
 use Tavaan\Engine\Mail\MimeBuilder;
