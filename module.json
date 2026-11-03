@@ -11,35 +11,21 @@
     }
   },
   "providers": [
-    "Tavaan\\Engine\\Mail\\MailerServiceProvider"
+    "Tavaan\\Engine\\Mail\\MailServiceProvider"
   ],
   "requires": {
     "php": ">=8.2",
-    "engines": [
-      "config",
-      "event"
-    ]
-  },
-  "soft_requires": {
-    "engines": [
-      "view",
-      "queue",
-      "log",
-      "filesystem"
-    ],
-    "extensions": [
-      "openssl"
-    ]
+    "engines": ["config", "event"]
   },
   "config": {
     "file": "config/mail.php",
     "key": "mail"
   },
+  "tables": [],
   "commands": [],
   "facade": {
     "name": "Mail",
     "accessor": "mailer"
   },
-  "docs": "docs/03-engines/mail.md",
-  "notes": "M5 — SMTP client خالص خودنوشته (STARTTLS/SSL + AUTH LOGIN/PLAIN، بدون ext)، MIME builder با RFC 2047 فارسی، ۶ transport (smtp/sendmail/mail/log/array/ses)، Mailable + Queue + Fake/Assertions. 🔒 محافظ Header Injection."
+  "docs": "docs/03-engines/mail.md"
 }

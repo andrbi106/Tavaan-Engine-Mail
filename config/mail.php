@@ -1,36 +1,17 @@
 <?php
-
 declare(strict_types=1);
-
-/*|--------------------------------------------------------------------------
- | Mail Engine Configuration
- |--------------------------------------------------------------------------
- |
- | پیکربندی موتور mail — همهٔ کلیدهای مستندشده در `docs/03-engines/mail.md` بخش «پیکربندی».
- |
- |@see https://github.com/Derogaramin/Tavaan-Doc/blob/main/docs/03-engines/mail.md
- */
-
 return [
-    /*| پیش‌فرض موتور (driver/store یا حالت فعال) */
-    'default' => env('MAIL_DEFAULT', 'default'),
-
-    /*| کلید کش (در صورت استفاده) */
-    'prefix' => env('MAIL_PREFIX', 'mail:'),
-
-    /*| تنظیمات لاگ */
-    'log' => [
-        'channel' => env('MAIL_LOG_CHANNEL', 'mail'),
+    'driver' => \getenv('TVN_MAIL_DRIVER') !== false ? \getenv('TVN_MAIL_DRIVER') : 'log',
+    'log_path' => \getenv('TVN_MAIL_LOG') !== false ? \getenv('TVN_MAIL_LOG') : 'storage/logs/mail.log',
+    'from' => [
+        'address' => \getenv('TVN_MAIL_FROM') !== false ? \getenv('TVN_MAIL_FROM') : 'noreply@example.com',
+        'name' => \getenv('TVN_MAIL_FROM_NAME') !== false ? \getenv('TVN_MAIL_FROM_NAME') : 'Tavaan',
     ],
-
-    /*| Facade */
-    'facade' => [
-        'name' => 'Mail',
-        'accessor' => 'mailer',
-    ],
-
-    /*| سایر کلیدها (طبق مستندات) */
-    'options' => [
-        // TODO: کلیدهای اضافی طبق سند §۶ (پیکربندی)
+    'smtp' => [
+        'host' => \getenv('TVN_SMTP_HOST') !== false ? \getenv('TVN_SMTP_HOST') : '127.0.0.1',
+        'port' => (int) (\getenv('TVN_SMTP_PORT') !== false ? \getenv('TVN_SMTP_PORT') : 587),
+        'encryption' => \getenv('TVN_SMTP_ENCRYPTION') !== false ? \getenv('TVN_SMTP_ENCRYPTION') : 'tls',
+        'username' => \getenv('TVN_SMTP_USERNAME') !== false ? \getenv('TVN_SMTP_USERNAME') : null,
+        'password' => \getenv('TVN_SMTP_PASSWORD') !== false ? \getenv('TVN_SMTP_PASSWORD') : null,
     ],
 ];

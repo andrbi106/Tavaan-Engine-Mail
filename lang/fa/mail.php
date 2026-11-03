@@ -1,10 +1,2 @@
 <?php
-
-declare(strict_types=1);
-
-/*| پیام‌های fa برای موتور mail */
-
-return [
-    'error_default' => 'خطای ناشناخته (mail)',
-    'not_configured' => 'موتور پیکربندی نشده است (mail)',
-];
+return ['error_send' => 'خطا در ارسال ایمیل.', 'error_smtp' => 'خطای SMTP.'];

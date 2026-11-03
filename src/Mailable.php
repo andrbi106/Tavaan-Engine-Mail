@@ -4,92 +4,75 @@ declare(strict_types=1);
 
 namespace Tavaan\Engine\Mail;
 
-use Tavaan\Core\Contracts\Config\RepositoryInterface as Config;
-
 /**
- * Mailable — پیاده‌سازی اصلی موتور.
+ * Mailable — کلاس پایه برای ایمیل‌های قابل ساخت.
  *
- * @see \Tavaan\Engine\Mail\Contracts\MailableInterface
+ * @see docs/03-engines/mail.md
  */
-final class Mailable implements Contracts\MailableInterface
+abstract class Mailable
 {
-    /**
-     * @param Config $config پیکربندی موتور
-     */
-    public function __construct(
-        private readonly Config $config,
-    ) {
+    protected ?string $subject = null;
+    protected ?string $view = null;
+    /** @var array<string, mixed> */
+    protected array $viewData = [];
+    /** @var list<string> */
+    protected array $to = [];
+    protected ?string $from = null;
+    /** @var list<array{path: string, name: string, mime: string}> */
+    protected array $attachments = [];
+
+    abstract public function build(): self;
+
+    public function subject(string $subject): self
+    {
+        $this->subject = $subject;
+        return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function build(/* ... */): mixed
+    public function view(string $view, array $data = []): self
     {
-        // TODO: پیاده‌سازی build مطابق مستندات (سند §3 API).
-        return null;
+        $this->view = $view;
+        $this->viewData = $data;
+        return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function subject(/* ... */): mixed
+    public function to(string $email): self
     {
-        // TODO: پیاده‌سازی subject مطابق مستندات (سند §3 API).
-        return null;
+        $this->to[] = $email;
+        return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function view(/* ... */): mixed
+    public function from(string $email): self
     {
-        // TODO: پیاده‌سازی view مطابق مستندات (سند §3 API).
-        return null;
+        $this->from = $email;
+        return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function with(/* ... */): mixed
+    public function attach(string $path, ?string $name = null, string $mime = 'application/octet-stream'): self
     {
-        // TODO: پیاده‌سازی with مطابق مستندات (سند §3 API).
-        return null;
+        $this->attachments[] = ['path' => $path, 'name' => $name ?? \basename($path), 'mime' => $mime];
+        return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function attach(/* ... */): mixed
-    {
-        // TODO: پیاده‌سازی attach مطابق مستندات (سند §3 API).
-        return null;
-    }
+    public function getSubject(): ?string { return $this->subject; }
+    public function getView(): ?string { return $this->view; }
+    public function getViewData(): array { return $this->viewData; }
+    /** @return list<string> */
+    public function getTo(): array { return $this->to; }
+    public function getFrom(): ?string { return $this->from; }
+    public function getAttachments(): array { return $this->attachments; }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function replyTo(/* ... */): mixed
+    public function toMessage(): Message
     {
-        // TODO: پیاده‌سازی replyTo مطابق مستندات (سند §3 API).
-        return null;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function send(/* ... */): mixed
-    {
-        // TODO: پیاده‌سازی send مطابق مستندات (سند §3 API).
-        return null;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function queue(/* ... */): mixed
-    {
-        // TODO: پیاده‌سازی queue مطابق مستندات (سند §3 API).
-        return null;
+        $this->build();
+        $msg = new Message();
+        if ($this->subject !== null) $msg->subject($this->subject);
+        if ($this->from !== null) $msg->from($this->from);
+        foreach ($this->to as $email) $msg->to($email);
+        foreach ($this->attachments as $a) $msg->attach($a['path'], $a['name'], $a['mime']);
+        if ($this->view !== null) {
+            $msg->html("<!-- View: {$this->view} -->");
+        }
+        return $msg;
     }
 }
