@@ -75,4 +75,21 @@ abstract class Mailable
         }
         return $msg;
     }
+
+    public function queue(/* ... */): mixed
+    {
+        return null;
+    }
+    public function replyTo(/* ... */): mixed
+    {
+        return null;
+    }
+    public function send(/* ... */): mixed
+    {
+        return null;
+    }
+    public function with(/* ... */): mixed
+    {
+        return null;
+    }
 }
