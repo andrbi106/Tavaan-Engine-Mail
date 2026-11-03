@@ -6,41 +6,50 @@ namespace Tavaan\Engine\Mail;
 
 final class Mailer
 {
-    public function to(string $path, array $params = [], bool $secure = null)
+    private array $sent = [];
+
+    public function __construct(private readonly array $config = []) {}
+
+    public function send(Mailable $mailable): SentMessage
     {
-        return null;
+        $message = $mailable->toMessage();
+        $this->sent[] = $message;
+        return new SentMessage($message);
     }
-    public function cc()
+
+    
+
+    public function queue(Mailable $mailable): self
     {
-        return null;
+        return $this;
     }
-    public function bcc()
+
+    public function later(int $delay, Mailable $mailable): self
     {
-        return null;
+        return $this;
     }
-    public function send()
+
+    public function raw(string $text, callable $callback): SentMessage
     {
-        if (!headers_sent()) { http_response_code($this->status); foreach ($this->headers->all() as $name => $value) { header(str_replace(" ", "-", ucwords(str_replace("-", " ", $name))) . ": " . $value); } } echo $this->getContent();
-    }: {$value}"); } } echo $this->getContent();
+        $message = new Message();
+        $message->text($text);
+        $callback($message);
+        $this->sent[] = $message;
+        return new SentMessage($message);
     }
-    public function queue()
+
+    public function to(string $email): PendingMail
     {
-        return null;
+        return (new PendingMail($this))->to($email);
     }
-    public function later()
+
+    public function getSent(): array
     {
-        return null;
+        return $this->sent;
     }
-    public function raw()
+
+    public function sendNow(Mailable $mailable): SentMessage
     {
-        return null;
-    }
-    public function fake()
-    {
-        return null;
-    }
-    public function assertSent()
-    {
-        return null;
+        return $this->send($mailable);
     }
 }

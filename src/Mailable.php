@@ -4,21 +4,13 @@ declare(strict_types=1);
 
 namespace Tavaan\Engine\Mail;
 
-/**
- * Mailable — کلاس پایه برای ایمیل‌های قابل ساخت.
- *
- * @see docs/03-engines/mail.md
- */
 abstract class Mailable
 {
     protected ?string $subject = null;
     protected ?string $view = null;
-    /** @var array<string, mixed> */
     protected array $viewData = [];
-    /** @var list<string> */
     protected array $to = [];
     protected ?string $from = null;
-    /** @var list<array{path: string, name: string, mime: string}> */
     protected array $attachments = [];
 
     abstract public function build(): self;
@@ -50,17 +42,26 @@ abstract class Mailable
 
     public function attach(string $path, ?string $name = null, string $mime = 'application/octet-stream'): self
     {
-        $this->attachments[] = ['path' => $path, 'name' => $name ?? \basename($path), 'mime' => $mime];
+        $this->attachments[] = ['path' => $path, 'name' => $name ?? basename($path), 'mime' => $mime];
         return $this;
     }
 
     public function getSubject(): ?string { return $this->subject; }
     public function getView(): ?string { return $this->view; }
     public function getViewData(): array { return $this->viewData; }
-    /** @return list<string> */
     public function getTo(): array { return $this->to; }
     public function getFrom(): ?string { return $this->from; }
     public function getAttachments(): array { return $this->attachments; }
+
+    public function send(): self
+    {
+        return $this;
+    }
+
+    public function with(array|string $relations): self
+    {
+        return $this;
+    }
 
     public function toMessage(): Message
     {
@@ -70,27 +71,6 @@ abstract class Mailable
         if ($this->from !== null) $msg->from($this->from);
         foreach ($this->to as $email) $msg->to($email);
         foreach ($this->attachments as $a) $msg->attach($a['path'], $a['name'], $a['mime']);
-        if ($this->view !== null) {
-            $msg->html("<!-- View: {$this->view} -->");
-        }
         return $msg;
-    }
-
-    public function queue()
-    {
-        return null;
-    }
-    public function replyTo()
-    {
-        return null;
-    }
-    public function send()
-    {
-        if (!headers_sent()) { http_response_code($this->status); foreach ($this->headers->all() as $name => $value) { header(str_replace(" ", "-", ucwords(str_replace("-", " ", $name))) . ": " . $value); } } echo $this->getContent();
-    }: {$value}"); } } echo $this->getContent();
-    }
-    public function with(array|string $relations): self
-    {
-        $clone = clone $this; return $clone;
     }
 }
