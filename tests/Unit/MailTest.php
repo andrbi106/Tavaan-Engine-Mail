@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tavaan\Engine\Mail\Tests\Unit;
 
-use PHPUnit\Framework\TestCase;
+use Tavaan\Testing\TestCase;
 use Tavaan\Engine\Mail\Message;
 use Tavaan\Engine\Mail\SentMessage;
 use Tavaan\Engine\Mail\Mailable;
