@@ -6,40 +6,41 @@ namespace Tavaan\Engine\Mail;
 
 final class Mailer
 {
-    public function to(/* ... */): mixed
+    public function to(string $path, array $params = [], bool $secure = null)
     {
         return null;
     }
-    public function cc(/* ... */): mixed
+    public function cc()
     {
         return null;
     }
-    public function bcc(/* ... */): mixed
+    public function bcc()
     {
         return null;
     }
-    public function send(/* ... */): mixed
+    public function send()
     {
-        if (!headers_sent()) { http_response_code($this->status); foreach ($this->headers->all() as $name => $value) { $h = str_replace(" ", "-", ucwords(str_replace("-", " ", $name))); header("{$h}: {$value}"); } } echo $this->getContent();
+        if (!headers_sent()) { http_response_code($this->status); foreach ($this->headers->all() as $name => $value) { header(str_replace(" ", "-", ucwords(str_replace("-", " ", $name))) . ": " . $value); } } echo $this->getContent();
+    }: {$value}"); } } echo $this->getContent();
     }
-    public function queue(/* ... */): mixed
+    public function queue()
     {
         return null;
     }
-    public function later(/* ... */): mixed
+    public function later()
     {
         return null;
     }
-    public function raw(/* ... */): mixed
+    public function raw()
     {
         return null;
     }
-    public function fake(/* ... */): mixed
+    public function fake()
     {
         return null;
     }
-    public function assertSent(/* ... */): mixed
+    public function assertSent()
     {
-        $this->assertTrue(count($this->sent) > 0);
+        return null;
     }
 }

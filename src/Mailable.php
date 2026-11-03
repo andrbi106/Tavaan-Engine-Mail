@@ -76,20 +76,21 @@ abstract class Mailable
         return $msg;
     }
 
-    public function queue(/* ... */): mixed
+    public function queue()
     {
         return null;
     }
-    public function replyTo(/* ... */): mixed
+    public function replyTo()
     {
         return null;
     }
-    public function send(/* ... */): mixed
+    public function send()
     {
-        if (!headers_sent()) { http_response_code($this->status); foreach ($this->headers->all() as $name => $value) { $h = str_replace(" ", "-", ucwords(str_replace("-", " ", $name))); header("{$h}: {$value}"); } } echo $this->getContent();
+        if (!headers_sent()) { http_response_code($this->status); foreach ($this->headers->all() as $name => $value) { header(str_replace(" ", "-", ucwords(str_replace("-", " ", $name))) . ": " . $value); } } echo $this->getContent();
+    }: {$value}"); } } echo $this->getContent();
     }
-    public function with(/* ... */): mixed
+    public function with(array|string $relations): self
     {
-        return $this;
+        $clone = clone $this; return $clone;
     }
 }
