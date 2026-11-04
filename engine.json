@@ -15,7 +15,10 @@
   ],
   "requires": {
     "php": ">=8.2",
-    "engines": ["config", "event"]
+    "engines": [
+      "config",
+      "event"
+    ]
   },
   "config": {
     "file": "config/mail.php",
@@ -27,5 +30,6 @@
     "name": "Mail",
     "accessor": "mailer"
   },
-  "docs": "docs/03-engines/mail.md"
+  "docs": "docs/03-engines/mail.md",
+  "class": "Tavaan\\Engine\\Mail\\MailEngine"
 }

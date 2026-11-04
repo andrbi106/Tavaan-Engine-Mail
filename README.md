@@ -2,6 +2,8 @@
 
 > **پست الکترونیک** — موتور Mail در فریمورک تَوان
 
+این موتور از کلاس پایهٔ `Engine` (در [Tavaan-Engine-Core](https://github.com/andrbi106/Tavaan-Engine-Core)) ارث می‌برد.
+
 ## مشخصات
 
 | فیلد | مقدار |
@@ -11,71 +13,60 @@
 | عنوان فارسی | پست الکترونیک |
 | نسخه | `0.1.0` |
 | namespace | `Tavaan\Engine\Mail` |
-| نوع | `engine` |
-| Facade | `Mail` (accessor: `mailer`) |
+| کلاس موتور | `Tavaan\Engine\Mail\MailEngine` |
+| Facade | Mail (`mailer`) |
 
-## قراردادها (Contracts)
+## کلاس موتور
 
-این موتور قراردادهای زیر را ارائه می‌دهد:
+```php
+namespace Tavaan\Engine\Mail;
 
-- `Tavaan\Engine\Mail\Contracts\TransportInterface`
+use Tavaan\EngineCore\Engine as BaseEngine;
+use Tavaan\EngineCore\Contracts\EngineManifestInterface;
 
-## Facadeها
+final class MailEngine extends BaseEngine
+{
+    public function __construct(EngineManifestInterface $manifest)
+    {
+        parent::__construct($manifest);
+    }
 
-- `Tavaan\Engine\Mail\Facades\Mail`
+    public function register(ContainerInterface $container): void
+    {
+        parent::register($container);
+        // bindingهای اختصاصی موتور
+    }
 
-## کلاس‌های اصلی
+    public function boot(): void
+    {
+        parent::boot();
+    }
+}
+```
 
-- `src/Attachment.php`
-- `src/Events/MessageSending.php`
-- `src/Events/MessageSent.php`
-- `src/Jobs/SendQueuedMail.php`
-- `src/MailException.php`
-- `src/MailManager.php`
-- `src/MailServiceProvider.php`
-- `src/Mailable.php`
-- `src/Mailer.php`
-- `src/Message.php`
-- `src/MimeBuilder.php`
-- `src/Transports/ArrayAndLogTransports.php`
-- `src/Transports/MailTransport.php`
-- `src/Transports/SendmailTransport.php`
-- `src/Transports/SesTransport.php`
-- `src/Transports/SmtpTransport.php`
+**فایل:** `src/MailEngine.php`
+
+## وابستگی‌ها
+
+**موتورهای مورد‌نیاز:** `config`, `event`
 
 ## Service Providerها
 
 - `Tavaan\Engine\Mail\MailServiceProvider`
 
-## وابستگی‌ها
+## سه درگاه ارتباط با سایر موتورها
 
-**موتورهای مورد‌نیاز:**
-
-- `config`
-- `event`
-
-## پیکربندی
-
-- فایل پیکربندی: `config/mail.php`
-- کلید: `mail`
+| درگاه | الگو | متدهای convenience |
+|---|---|---|
+| Container | pull-based DI | `make()`, `bound()` |
+| Events | pub/sub | `dispatch()`, `listen()` |
+| EngineBus | point-to-point RPC | `call()`, `offer()` |
 
 ## نصب
 
 ```bash
 git clone https://github.com/andrbi106/Tavaan-Engine-Mail.git
 ```
-
-این موتور بخشی از فریمورک تَوان است و معمولاً به‌صورت مستقیم نصب نمی‌شود،
-بلکه توسط [Tavaan-Core](https://github.com/andrbi106/Tavaan-Core) مدیریت می‌شود.
-
-## روابط با سایر مخازن
-
-| مخزن | نقش |
-|---|---|
-| **`andrbi106/Tavaan-Engine-Mail`** (این مخزن) | موتور Mail |
-| `andrbi106/Tavaan-Engine-Core` | ساختار پایه + درگاه ارتباط موتورها |
-| `andrbi106/Tavaan-Core` | اسکلت اپلیکیشن + همهٔ موتورها |
-| `Derogaramin/Tavaan-Framework` | فریمورک مادر (monorepo) |
 
 ## مجوز
 
